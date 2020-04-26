@@ -29,10 +29,11 @@ class LogMessageToChannels
      * @param int $level The error level
      * @param mixed $message The error message
      * @param mixed $context Optional context arguments
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function log(string $channel, int $level, $message, $context = null): bool
+    public function log(string $channel, int $level, $message, $context = null, int $nesting = 5): bool
     {
         try {
             // Add the logger if it doesn't exist
@@ -44,9 +45,9 @@ class LogMessageToChannels
                 $this->addChannel($channel, $handler);
             }
 
-            $message = $this->formatMessage($message);
+            $message = $this->formatMessage($message, $nesting);
             $message = $context !== null
-                ? $message . "\n```\n" . $this->formatMessage($context) . "\n```\n"
+                ? $message . "\n```\n" . $this->formatMessage($context, $nesting) . "\n```\n"
                 : $message . "\n";
             $this->channels[$channel]->{Logger::getLevelName($level)}($message, []);
             return true;
@@ -64,7 +65,7 @@ class LogMessageToChannels
      * @param HandlerInterface $handler     The channel handler
      * @param string|null      $path        The path of the channel file, DEFAULT storage_path()/logs
      */
-    public function addChannel(string $channelName, HandlerInterface $handler, string $path = null): void
+    protected function addChannel(string $channelName, HandlerInterface $handler, string $path = null): void
     {
         $this->channels[$channelName] = new Logger($channelName);
         /** @var StreamHandler $streamHandler */
@@ -81,15 +82,16 @@ class LogMessageToChannels
     /**
      * Adds a log record at the DEBUG level.
      *
-     * @param  string $channel The channel name
-     * @param  mixed $message The log message
-     * @param  mixed $context The log context
+     * @param string $channel The channel name
+     * @param mixed $message The log message
+     * @param mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function debug(string $channel, $message, $context = null): bool
+    public function debug(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::DEBUG, $message, $context);
+        return $this->log($channel, Logger::DEBUG, $message, $context, $nesting);
     }
 
     /**
@@ -98,12 +100,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function info(string $channel, $message, $context = null): bool
+    public function info(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::INFO, $message, $context);
+        return $this->log($channel, Logger::INFO, $message, $context, $nesting);
     }
 
     /**
@@ -112,12 +115,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function notice(string $channel, $message, $context = null): bool
+    public function notice(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::NOTICE, $message, $context);
+        return $this->log($channel, Logger::NOTICE, $message, $context, $nesting);
     }
 
     /**
@@ -126,12 +130,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function warning(string $channel, $message, $context = null): bool
+    public function warning(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::WARNING, $message, $context);
+        return $this->log($channel, Logger::WARNING, $message, $context, $nesting);
     }
 
     /**
@@ -140,12 +145,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function error(string $channel, $message, $context = null): bool
+    public function error(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::ERROR, $message, $context);
+        return $this->log($channel, Logger::ERROR, $message, $context, $nesting);
     }
 
     /**
@@ -154,12 +160,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return Boolean Whether the record has been processed
      */
-    public function critical(string $channel, $message, $context = null): bool
+    public function critical(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::CRITICAL, $message, $context);
+        return $this->log($channel, Logger::CRITICAL, $message, $context, $nesting);
     }
 
     /**
@@ -168,12 +175,13 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function alert(string $channel, $message, $context = null): bool
+    public function alert(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::ALERT, $message, $context);
+        return $this->log($channel, Logger::ALERT, $message, $context, $nesting);
     }
 
     /**
@@ -182,21 +190,23 @@ class LogMessageToChannels
      * @param  string $channel The channel name
      * @param  mixed $message The log message
      * @param  mixed $context The log context
+     * @param int $nesting
      *
      * @return bool Whether the record has been processed
      */
-    public function emergency(string $channel, $message, $context = null): bool
+    public function emergency(string $channel, $message, $context = null, int $nesting = 5): bool
     {
-        return $this->log($channel, Logger::EMERGENCY, $message, $context);
+        return $this->log($channel, Logger::EMERGENCY, $message, $context, $nesting);
     }
 
     /**
      * Format the parameters for the logger.
      *
-     * @param  mixed  $message
+     * @param mixed $message
+     * @param int $nesting
      * @return mixed
      */
-    protected function formatMessage($message)
+    protected function formatMessage($message, int $nesting)
     {
         if ($message === null) {
             return 'null';
@@ -211,7 +221,7 @@ class LogMessageToChannels
         }
 
         if (is_array($message) || is_object($message)) {
-            return self::printRLevel($message);
+            return self::printRLevel($message, $nesting);
         }
 
         if (is_string($message) && $json = json_decode($message, true)) {
@@ -223,10 +233,10 @@ class LogMessageToChannels
 
     /**
      * @param $data
-     * @param int $level
+     * @param int $nesting
      * @return string
      */
-    private static function printRLevel($data, $level = 5): string
+    protected static function printRLevel($data, int $nesting): string
     {
         static $innerLevel = 1;
 
@@ -291,7 +301,7 @@ class LogMessageToChannels
             }
 
             // Start dumping data
-            if ($level === 0 || $innerLevel < $level)
+            if ($nesting === 0 || $innerLevel <= $nesting)
             {
                 // Start recursive print
                 $output .= "\n{$quoteTabs}(";
@@ -304,7 +314,7 @@ class LogMessageToChannels
                     $tabLevel += 2;
                     $innerLevel++;
 
-                    $output  .= in_array(gettype($element), $recursiveType, true) ? self::printRLevel($element, $level) : $element;
+                    $output  .= in_array(gettype($element), $recursiveType, true) ? self::printRLevel($element, $nesting) : $element;
 
                     // Decrement level
                     $tabLevel -= 2;

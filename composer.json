@@ -11,6 +11,17 @@
             "role": "Developer"
         }
     ],
+    "keywords": [
+        "log-message",
+        "laravel-log",
+        "laravel",
+        "laravel7",
+        "log",
+        "logger",
+        "log-to-file",
+        "log-to-channels",
+        "logging"
+    ],
     "require": {
         "php": "^7.2",
         "ext-json": "*",
