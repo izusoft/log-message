@@ -1,0 +1,37 @@
+{
+    "name": "izusoft/log-message",
+    "description": "Allows you to create logs in an arbitrary file, works with strings, arrays, objects.",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Igor Zubarev",
+            "email": "zubarevski@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "monolog/monolog": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IzuSoft\\Logger\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IzuSoft\\Logger\\LoggerServiceProvider"
+            ],
+            "aliases": {
+                "LogMessage": "IzuSoft\\Logger\\Facades\\LogMessageFacade"
+            }
+        }
+    }
+}
