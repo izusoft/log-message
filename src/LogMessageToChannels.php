@@ -22,7 +22,7 @@ class LogMessageToChannels
      *
      * @var Logger[]
      */
-    protected $channels = [];
+    protected array $channels = [];
 
     /**
      * @param string $channel The channel to log the record in

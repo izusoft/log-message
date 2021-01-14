@@ -3,7 +3,7 @@
     "description": "Allows you to create logs in an arbitrary file, works with strings, arrays, objects.",
     "minimum-stability": "stable",
     "license": "MIT",
-    "version": "1.0",
+    "version": "1.1",
     "authors": [
         {
             "name": "Igor Zubarev",
@@ -23,9 +23,9 @@
         "logging"
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.4 || ^8.0",
         "ext-json": "*",
-        "monolog/monolog": "^2.0"
+        "monolog/monolog": "^2.2"
     },
     "autoload": {
         "psr-4": {
